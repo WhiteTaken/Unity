@@ -12,8 +12,7 @@ namespace GitHub.Unity
     [Serializable]
     class InitProjectView : Subview
     {
-        private const string NoRepoTitle = "No Git repository found for this project";
-        private const string NoRepoDescription = "Initialize a Git repository to track changes and collaborate with others.";
+        private const string NoRepoTitle = "To begin using GitHub, initialize a git repository";
 
         [SerializeField] private bool isBusy;
         [SerializeField] private bool isPublished;
@@ -32,40 +31,19 @@ namespace GitHub.Unity
 
         public override void OnGUI()
         {
-            var headerRect = EditorGUILayout.BeginHorizontal(Styles.HeaderBoxStyle);
-            {
-                GUILayout.Space(5);
-                GUILayout.BeginVertical(GUILayout.Width(16));
-                {
-                    GUILayout.Space(5);
-
-                    var iconRect = GUILayoutUtility.GetRect(new GUIContent(Styles.BigLogo), GUIStyle.none, GUILayout.Height(20), GUILayout.Width(20));
-                    iconRect.y = headerRect.center.y - (iconRect.height / 2);
-                    GUI.DrawTexture(iconRect, Styles.BigLogo, ScaleMode.ScaleToFit);
-
-                    GUILayout.Space(5);
-                }
-                GUILayout.EndVertical();
-
-                GUILayout.Space(5);
-
-                GUILayout.BeginVertical();
-                {
-                    var headerContent = new GUIContent(NoRepoTitle);
-                    var headerTitleRect = GUILayoutUtility.GetRect(headerContent, Styles.HeaderTitleStyle);
-                    headerTitleRect.y = headerRect.center.y - (headerTitleRect.height / 2);
-
-                    GUI.Label(headerTitleRect, headerContent, Styles.HeaderTitleStyle);
-                }
-                GUILayout.EndVertical();
-            }
-            EditorGUILayout.EndHorizontal();
-
             GUILayout.BeginVertical(Styles.GenericBoxStyle);
             {
                 GUILayout.FlexibleSpace();
 
-                GUILayout.Label(NoRepoDescription, Styles.CenteredLabel);
+                GUILayout.BeginHorizontal();
+                {
+                  GUILayout.FlexibleSpace();
+                  GUILayout.Label(Styles.EmptyStateInit, GUILayout.MaxWidth(265), GUILayout.MaxHeight(136));
+                  GUILayout.FlexibleSpace();
+                }
+                GUILayout.EndHorizontal();
+
+                GUILayout.Label(NoRepoTitle, Styles.BoldCenteredLabel);
 
                 GUILayout.BeginHorizontal();
                 GUILayout.FlexibleSpace();
@@ -81,9 +59,10 @@ namespace GitHub.Unity
                     }
                 }
                 EditorGUI.EndDisabledGroup();
-
                 GUILayout.FlexibleSpace();
                 GUILayout.EndHorizontal();
+
+                EditorGUILayout.HelpBox("There was an error initializing a repository.", MessageType.Error);
 
                 GUILayout.FlexibleSpace();
             }

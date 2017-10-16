@@ -70,6 +70,7 @@ namespace GitHub.Unity
                                 commitFileAreaStyle,
                                 commitButtonStyle,
                                 textFieldStyle,
+                                boldCenteredLabel,
                                 centeredLabel,
                                 commitDescriptionFieldStyle,
                                 toggleMixedStyle,
@@ -95,6 +96,7 @@ namespace GitHub.Unity
                                  localCommitIcon,
                                  repoIcon,
                                  lockIcon,
+                                 emptyStateInit,
                                  dropdownListIcon;
 
         private static Color timelineBarColor;
@@ -543,6 +545,21 @@ namespace GitHub.Unity
             }
         }
 
+        public static GUIStyle BoldCenteredLabel
+        {
+            get
+            {
+                if (boldCenteredLabel == null)
+                {
+                    boldCenteredLabel = new GUIStyle(EditorStyles.boldLabel);
+                    boldCenteredLabel.name = "BoldCenteredLabelStyle";
+                    boldCenteredLabel.alignment = TextAnchor.MiddleCenter;
+                }
+                return boldCenteredLabel;
+            }
+        }
+
+
         public static GUIStyle CommitDescriptionFieldStyle
         {
             get
@@ -785,6 +802,19 @@ namespace GitHub.Unity
                 }
                 return lockIcon;
             }
+        }
+
+        public static Texture2D EmptyStateInit
+        {
+          get
+          {
+            if (emptyStateInit == null)
+            {
+              emptyStateInit = Utility.GetIcon("empty-state-init.png", "empty-state-init@2x.png");
+            }
+            return emptyStateInit;
+          }
+
         }
 
         public static Texture2D DropdownListIcon
