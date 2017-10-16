@@ -14,7 +14,7 @@ namespace GitHub.Unity
     {
         private const string NoRepoTitle = "To begin using GitHub, initialize a git repository";
 
-        [SerializeField] private bool isBusy;
+        [NonSerialized] private bool isBusy;
         [SerializeField] private bool isPublished;
 
         public override void OnDataUpdate()
