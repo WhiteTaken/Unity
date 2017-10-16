@@ -21,14 +21,15 @@ namespace GitHub.Unity
         private const string TwofaButton = "Verify";
 
         [SerializeField] private Vector2 scroll;
-        [SerializeField] private string username = "";
-        [SerializeField] private string two2fa = "";
+        [SerializeField] private string username = string.Empty;
+        [SerializeField] private string two2fa = string.Empty;
+        [SerializeField] private string message;
 
         [NonSerialized] private bool need2fa;
         [NonSerialized] private bool isBusy;
         [NonSerialized] private string errorMessage;
         [NonSerialized] private bool enterPressed;
-        [NonSerialized] private string password = "";
+        [NonSerialized] private string password = string.Empty;
         [NonSerialized] private AuthenticationService authenticationService;
 
 
@@ -98,6 +99,26 @@ namespace GitHub.Unity
             GUILayout.EndScrollView();
         }
 
+        public void SetMessage(string value)
+        {
+            message = value;
+        }
+
+        public void ClearMessage()
+        {
+            message = null;
+        }
+
+        public void SetUsername(string value)
+        {
+            username = value;
+        }
+
+        public void ClearUsername()
+        {
+            username = string.Empty;
+        }
+
         private void HandleEnterPressed()
         {
             if (Event.current.type != EventType.KeyDown)
@@ -112,6 +133,8 @@ namespace GitHub.Unity
         {
             EditorGUI.BeginDisabledGroup(isBusy);
             {
+                ShowMessage();
+
                 GUILayout.Space(3);
                 GUILayout.BeginHorizontal();
                 {
@@ -214,6 +237,16 @@ namespace GitHub.Unity
             else
             {
                 Redraw();
+            }
+        }
+
+        private void ShowMessage()
+        {
+            if (message != null)
+            {
+                GUILayout.Space(Styles.BaseSpacing + 3);
+                GUILayout.Label(message, Styles.CenteredLabel);
+                GUILayout.Space(Styles.BaseSpacing + 3);
             }
         }
 
