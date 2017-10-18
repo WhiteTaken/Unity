@@ -192,6 +192,7 @@ namespace GitHub.Unity
             add.OnStart += t => IsBusy = true;
             return add
                 .Then(GitClient.Commit(message, body))
+                .Then(UpdateGitStatus)
                 .Finally(() => IsBusy = false);
         }
 
@@ -201,6 +202,7 @@ namespace GitHub.Unity
             add.OnStart += t => IsBusy = true;
             return add
                 .Then(GitClient.Commit(message, body))
+                .Then(UpdateGitStatus)
                 .Finally(() => IsBusy = false);
         }
 
@@ -214,19 +216,22 @@ namespace GitHub.Unity
         public ITask Fetch(string remote)
         {
             var task = GitClient.Fetch(remote);
-            return HookupHandlers(task);
+            return HookupHandlers(task)
+                .Then(UpdateGitStatus);
         }
 
         public ITask Pull(string remote, string branch)
         {
             var task = GitClient.Pull(remote, branch);
-            return HookupHandlers(task, true);
+            return HookupHandlers(task, true)
+                .Then(UpdateGitStatus);
         }
 
         public ITask Push(string remote, string branch)
         {
             var task = GitClient.Push(remote, branch);
-            return HookupHandlers(task);
+            return HookupHandlers(task)
+                .Then(UpdateGitStatus);
         }
 
         public ITask Revert(string changeset)

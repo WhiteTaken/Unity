@@ -72,6 +72,11 @@ namespace GitHub.Unity
             base.OnEnable();
             AttachHandlers(Repository);
             CheckLogCache();
+
+            if (Repository != null)
+            {
+                UpdateStatus(Repository.CurrentStatus);
+            }
         }
 
         public override void OnDisable()
