@@ -86,6 +86,7 @@ namespace GitHub.Unity
     [Location("cache/branches.yaml", LocationAttribute.Location.LibraryFolder)]
     sealed class BranchCache : ScriptObjectSingleton<BranchCache>, IBranchCache
     {
+        [SerializeField] private DateTime lastUpdatedAt;
         [SerializeField] private List<GitBranch> localBranches;
         [SerializeField] private List<GitBranch> remoteBranches;
 
@@ -98,28 +99,42 @@ namespace GitHub.Unity
             get
             {
                 if (localBranches == null)
-                    localBranches = new List<GitBranch>();
+                {
+                    //Intentionally use the setter
+                    LocalBranches = new List<GitBranch>();
+                }
                 return localBranches;
             }
             set
             {
                 localBranches = value;
+                lastUpdatedAt = DateTime.Now;
                 Save(true);
             }
         }
+
         public List<GitBranch> RemoteBranches
         {
             get
             {
                 if (remoteBranches == null)
-                    remoteBranches = new List<GitBranch>();
+                {
+                    //Intentionally use the setter
+                    RemoteBranches = new List<GitBranch>();
+                }
                 return remoteBranches;
             }
             set
             {
                 remoteBranches = value;
+                lastUpdatedAt = DateTime.Now;
                 Save(true);
             }
+        }
+
+        public DateTime LastUpdatedAt
+        {
+            get { return lastUpdatedAt; }
         }
     }
 
@@ -176,7 +191,9 @@ namespace GitHub.Unity
     [Location("cache/gitlog.yaml", LocationAttribute.Location.LibraryFolder)]
     sealed class GitLogCache : ScriptObjectSingleton<GitLogCache>, IGitLogCache
     {
+        [SerializeField] private DateTime lastUpdatedAt;
         [SerializeField] private List<GitLogEntry> log;
+
         public GitLogCache()
         {}
 
@@ -185,14 +202,23 @@ namespace GitHub.Unity
             get
             {
                 if (log == null)
-                    log = new List<GitLogEntry>();
+                {
+                    //Intentionally use the setter
+                    Log = new List<GitLogEntry>();
+                }
                 return log;
             }
             set
             {
                 log = value;
+                lastUpdatedAt = DateTime.Now;
                 Save(true);
             }
+        }
+
+        public DateTime LastUpdatedAt
+        {
+            get { return lastUpdatedAt; }
         }
     }
 }

@@ -51,6 +51,7 @@ namespace GitHub.Unity
         [SerializeField] private int statusBehind;
 
         [SerializeField] private ChangesetTreeView changesetTree = new ChangesetTreeView();
+        [SerializeField] private DateTime gitLogCacheUpdatedAt;
         [SerializeField] private List<GitLogEntry> history = new List<GitLogEntry>();
         [SerializeField] private string currentRemote;
         [SerializeField] private bool isPublished;
@@ -104,23 +105,10 @@ namespace GitHub.Unity
 
         public void CheckLogCache()
         {
-            string firstItemCommitID = null;
-            if (history.Any())
+            var cacheLastUpdated = GitLogCache.Instance.LastUpdatedAt;
+            if (gitLogCacheUpdatedAt != cacheLastUpdated)
             {
-                firstItemCommitID = history.First().CommitID;
-            }
-
-            var cachedList = GitLogCache.Instance.Log;
-
-            string firstCachedItemCommitID = null;
-            if (cachedList.Any())
-            {
-                firstCachedItemCommitID = cachedList.First().CommitID;
-            }
-
-            if (firstItemCommitID != firstCachedItemCommitID)
-            {
-                Logger.Trace("CommitID {0} != Cached CommitId {1}", firstItemCommitID ?? "[NULL]", firstCachedItemCommitID ?? "[NULL]");
+                Logger.Trace("Displayed GitLog Timestamp {0} != Cached GitLog Timestamp {1}", gitLogCacheUpdatedAt, cacheLastUpdated);
                 logHasChanged = true;
                 Redraw();
             }

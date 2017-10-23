@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace GitHub.Unity
 {
@@ -6,5 +7,6 @@ namespace GitHub.Unity
     {
         List<GitBranch> LocalBranches { get; set; }
         List<GitBranch> RemoteBranches { get; set; }
+        DateTime LastUpdatedAt { get; }
     }
 }
