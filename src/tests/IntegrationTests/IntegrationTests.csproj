@@ -73,7 +73,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auth\LoginTests.cs" />
-    <Compile Include="Events\RepositoryManagerTests.cs" />
     <Compile Include="Events\RepositoryWatcherTests.cs" />
     <Compile Include="BaseGitEnvironmentTest.cs" />
     <Compile Include="BaseGitRepoTest.cs" />
