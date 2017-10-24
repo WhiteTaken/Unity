@@ -26,14 +26,19 @@ namespace GitHub.Unity
             SetupMetrics(Environment.UnityVersion, ApplicationCache.Instance.FirstRun);
         }
 
+        protected override void SetupCache()
+        {
+            CacheContainer = new CacheContainer
+            {
+                GitLogCache = GitLogCache.Instance,
+                BranchCache = BranchCache.Instance
+            };
+        }
+
         protected override void InitializeUI()
         {
             Logger.Trace("Restarted {0}", Environment.Repository);
             EnvironmentCache.Instance.Flush();
-
-            CacheManager.SetupCache(BranchCache.Instance);
-            CacheManager.SetupCache(GitLogCache.Instance);
-            CacheManager.SetRepository(Environment.Repository);
 
             ProjectWindowInterface.Initialize(Environment.Repository);
             var window = Window.GetWindow();

@@ -97,6 +97,7 @@ namespace GitHub.Unity
         private readonly IGitClient gitClient;
         private readonly IPlatform platform;
         private readonly IRepositoryPathConfiguration repositoryPaths;
+        private readonly ICacheContainer cacheContainer;
         private readonly ITaskManager taskManager;
         private readonly IRepositoryWatcher watcher;
 
@@ -118,9 +119,10 @@ namespace GitHub.Unity
 
         public RepositoryManager(IPlatform platform, ITaskManager taskManager, IGitConfig gitConfig,
             IRepositoryWatcher repositoryWatcher, IGitClient gitClient,
-            IRepositoryPathConfiguration repositoryPaths)
+            IRepositoryPathConfiguration repositoryPaths, ICacheContainer cacheContainer)
         {
             this.repositoryPaths = repositoryPaths;
+            this.cacheContainer = cacheContainer;
             this.platform = platform;
             this.taskManager = taskManager;
             this.gitClient = gitClient;
@@ -130,8 +132,7 @@ namespace GitHub.Unity
             SetupWatcher();
         }
 
-        public static RepositoryManager CreateInstance(IPlatform platform, ITaskManager taskManager,
-            IGitClient gitClient, NPath repositoryRoot)
+        public static RepositoryManager CreateInstance(IPlatform platform, ITaskManager taskManager, IGitClient gitClient, NPath repositoryRoot, ICacheContainer cacheContainer)
         {
             var repositoryPathConfiguration = new RepositoryPathConfiguration(repositoryRoot);
             string filePath = repositoryPathConfiguration.DotGitConfig;
@@ -140,13 +141,21 @@ namespace GitHub.Unity
             var repositoryWatcher = new RepositoryWatcher(platform, repositoryPathConfiguration, taskManager.Token);
 
             return new RepositoryManager(platform, taskManager, gitConfig, repositoryWatcher,
-                gitClient, repositoryPathConfiguration);
+                gitClient, repositoryPathConfiguration, cacheContainer);
         }
 
         public void Initialize()
         {
             Logger.Trace("Initialize");
             watcher.Initialize();
+
+            cacheContainer.GitLogCache.CacheInvalidated += () => {
+                
+            };
+
+            cacheContainer.BranchCache.CacheInvalidated += () => {
+                
+            };
         }
 
         public void Start()

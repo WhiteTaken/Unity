@@ -83,61 +83,6 @@ namespace GitHub.Unity
         }
     }
 
-    [Location("cache/branches.yaml", LocationAttribute.Location.LibraryFolder)]
-    sealed class BranchCache : ScriptObjectSingleton<BranchCache>, IBranchCache
-    {
-        [SerializeField] private DateTime lastUpdatedAt;
-        [SerializeField] private List<GitBranch> localBranches;
-        [SerializeField] private List<GitBranch> remoteBranches;
-
-        public BranchCache()
-        {
-        }
-
-        public List<GitBranch> LocalBranches
-        {
-            get
-            {
-                if (localBranches == null)
-                {
-                    //Intentionally use the setter
-                    LocalBranches = new List<GitBranch>();
-                }
-                return localBranches;
-            }
-            set
-            {
-                localBranches = value;
-                lastUpdatedAt = DateTime.Now;
-                Save(true);
-            }
-        }
-
-        public List<GitBranch> RemoteBranches
-        {
-            get
-            {
-                if (remoteBranches == null)
-                {
-                    //Intentionally use the setter
-                    RemoteBranches = new List<GitBranch>();
-                }
-                return remoteBranches;
-            }
-            set
-            {
-                remoteBranches = value;
-                lastUpdatedAt = DateTime.Now;
-                Save(true);
-            }
-        }
-
-        public DateTime LastUpdatedAt
-        {
-            get { return lastUpdatedAt; }
-        }
-    }
-
     [Location("views/branches.yaml", LocationAttribute.Location.LibraryFolder)]
     sealed class Favorites : ScriptObjectSingleton<Favorites>
     {
@@ -185,40 +130,6 @@ namespace GitHub.Unity
         public bool IsFavorite(string branchName)
         {
             return FavoriteBranches.Contains(branchName);
-        }
-    }
-
-    [Location("cache/gitlog.yaml", LocationAttribute.Location.LibraryFolder)]
-    sealed class GitLogCache : ScriptObjectSingleton<GitLogCache>, IGitLogCache
-    {
-        [SerializeField] private DateTime lastUpdatedAt;
-        [SerializeField] private List<GitLogEntry> log;
-
-        public GitLogCache()
-        {}
-
-        public List<GitLogEntry> Log
-        {
-            get
-            {
-                if (log == null)
-                {
-                    //Intentionally use the setter
-                    Log = new List<GitLogEntry>();
-                }
-                return log;
-            }
-            set
-            {
-                log = value;
-                lastUpdatedAt = DateTime.Now;
-                Save(true);
-            }
-        }
-
-        public DateTime LastUpdatedAt
-        {
-            get { return lastUpdatedAt; }
         }
     }
 }

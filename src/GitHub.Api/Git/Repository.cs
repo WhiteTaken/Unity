@@ -82,14 +82,6 @@ namespace GitHub.Unity
             }
         }
 
-        public ITask<List<GitLogEntry>> Log()
-        {
-            if (repositoryManager == null)
-                return new FuncListTask<GitLogEntry>(new NotReadyException().ToTask<List<GitLogEntry>>());
-
-            return repositoryManager.Log();
-        }
-
         public ITask CommitAllFiles(string message, string body)
         {
             return repositoryManager.CommitAllFiles(message, body);

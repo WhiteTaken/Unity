@@ -21,7 +21,7 @@ namespace GitHub.Unity
             UIScheduler = TaskScheduler.FromCurrentSynchronizationContext();
             ThreadingHelper.MainThreadScheduler = UIScheduler;
             TaskManager = new TaskManager(UIScheduler);
-            CacheManager = new CacheManager();
+            CacheContainer = new CacheContainer();
         }
 
         protected void Initialize()
@@ -107,6 +107,7 @@ namespace GitHub.Unity
                 .Then(GitClient.SetConfig("merge.unityyamlmerge.trustExitCode", "false", GitConfigSource.Local))
                 .Then(GitClient.LfsInstall())
                 .ThenInUI(SetProjectToTextSerialization)
+                .ThenInUI(SetupCache)
                 .Then(new ActionTask(CancellationToken, _ => {
                     AssemblyResources.ToFile(ResourceType.Generic, ".gitignore", targetPath, Environment);
                     AssemblyResources.ToFile(ResourceType.Generic, ".gitattributes", targetPath, Environment);
@@ -128,7 +129,7 @@ namespace GitHub.Unity
         {
             if (Environment.RepositoryPath != null)
             {
-                repositoryManager = Unity.RepositoryManager.CreateInstance(Platform, TaskManager, GitClient, Environment.RepositoryPath);
+                repositoryManager = Unity.RepositoryManager.CreateInstance(Platform, TaskManager, GitClient, Environment.RepositoryPath, CacheContainer);
                 repositoryManager.Initialize();
                 Environment.Repository.Initialize(repositoryManager);
                 repositoryManager.Start();
@@ -184,6 +185,7 @@ namespace GitHub.Unity
         }
 
         protected abstract void SetupMetrics();
+        protected abstract void SetupCache();
         protected abstract void InitializeUI();
         protected abstract void SetProjectToTextSerialization();
 
@@ -215,7 +217,7 @@ namespace GitHub.Unity
         public ISettings LocalSettings { get; protected set; }
         public ISettings SystemSettings { get; protected set; }
         public ISettings UserSettings { get; protected set; }
-        public CacheManager CacheManager { get; private set; }
+        public ICacheContainer CacheContainer { get; protected set; }
         public IUsageTracker UsageTracker { get; protected set; }
 
         protected TaskScheduler UIScheduler { get; private set; }
