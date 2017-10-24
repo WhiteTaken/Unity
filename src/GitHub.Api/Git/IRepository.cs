@@ -17,45 +17,20 @@ namespace GitHub.Unity
         ITask Push();
         ITask Fetch();
         ITask Revert(string changeset);
-        ITask ListLocks();
         ITask RequestLock(string file);
         ITask ReleaseLock(string file, bool force);
 
-        /// <summary>
-        /// Gets the name of the repository.
-        /// </summary>
-        string Name { get; }
-
-        /// <summary>
-        /// Gets the repository clone URL.
-        /// </summary>
-        UriString CloneUrl { get; }
-
-        /// <summary>
-        /// Gets the name of the owner of the repository, taken from the clone URL.
-        /// </summary>
-        string Owner { get; }
-
-        /// <summary>
-        /// Gets the local path of the repository.
-        /// </summary>
         NPath LocalPath { get; }
-        bool IsGitHub { get; }
-        /// <summary>
-        /// Gets the current remote of the repository.
-        /// </summary>
+        string Name { get; }
+        UriString CloneUrl { get; }
         GitRemote? CurrentRemote { get; }
-        /// <summary>
-        /// Gets the current branch of the repository.
-        /// </summary>
         GitBranch? CurrentBranch { get; }
+        List<GitBranch> LocalBranches { get; }
+        List<GitBranch> RemoteBranches { get; }
         GitStatus CurrentStatus { get; }
-        IList<GitRemote> Remotes { get; }
-        IEnumerable<GitBranch> LocalBranches { get; }
-        IEnumerable<GitBranch> RemoteBranches { get; }
-        IUser User { get; set; }
-        IList<GitLock> CurrentLocks { get; }
-        string CurrentBranchName { get; }
+        List<GitLock> CurrentLocks { get; }
+        List<GitLogEntry> Log { get; }
+        User User { get; }
 
         event Action<GitStatus> OnStatusChanged;
         event Action<string> OnCurrentBranchChanged;

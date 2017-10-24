@@ -21,7 +21,6 @@ namespace GitHub.Unity
             UIScheduler = TaskScheduler.FromCurrentSynchronizationContext();
             ThreadingHelper.MainThreadScheduler = UIScheduler;
             TaskManager = new TaskManager(UIScheduler);
-            CacheContainer = new CacheContainer();
         }
 
         protected void Initialize()

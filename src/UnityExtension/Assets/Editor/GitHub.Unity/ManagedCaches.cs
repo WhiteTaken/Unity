@@ -5,6 +5,108 @@ using UnityEngine;
 
 namespace GitHub.Unity
 {
+    [Location("cache/repoinfo.yaml", LocationAttribute.Location.LibraryFolder)]
+    sealed class RepositoryInfoCache : ScriptObjectSingleton<RepositoryInfoCache>, IRepositoryInfoCache
+    {
+        private static readonly TimeSpan DataTimeout = TimeSpan.FromSeconds(0.5);
+
+        [SerializeField] private DateTime lastUpdatedAt;
+        [SerializeField] private DateTime lastVerifiedAt;
+
+        [SerializeField] private string name;
+        [SerializeField] private GitRemote? gitRemote;
+        [SerializeField] private GitBranch? gitBranch;
+
+        public event Action CacheInvalidated;
+        public event Action<DateTime> CacheUpdated;
+
+        public RepositoryInfoCache()
+        { }
+
+        public void Update(string nameUpdate, GitRemote? gitRemoteUpdate, GitBranch? gitBranchUpdate)
+        {
+            var now = DateTime.Now;
+            var isUpdated = false;
+
+            if (name != nameUpdate)
+            {
+                name = nameUpdate;
+                isUpdated = true;
+            }
+
+            if (Nullable.Equals(gitRemote, gitRemoteUpdate))
+            {
+                gitRemote = gitRemoteUpdate;
+                isUpdated = true;
+            }
+
+            if (Nullable.Equals(gitBranch, gitBranchUpdate))
+            {
+                gitBranch = gitBranchUpdate;
+                isUpdated = true;
+            }
+
+            if (isUpdated)
+            {
+                lastUpdatedAt = now;
+            }
+
+            lastVerifiedAt = now;
+            Save(true);
+
+            if (isUpdated)
+            {
+                CacheUpdated.SafeInvoke(lastUpdatedAt);
+            }
+        }
+
+        private void ValidateData()
+        {
+            if (DateTime.Now - lastUpdatedAt > DataTimeout)
+            {
+                CacheInvalidated.SafeInvoke();
+                Update(null, null, null);
+            }
+        }
+
+        public DateTime LastUpdatedAt
+        {
+            get { return lastUpdatedAt; }
+        }
+
+        public DateTime LastVerifiedAt
+        {
+            get { return lastVerifiedAt; }
+        }
+
+        public string Name
+        {
+            get
+            {
+                ValidateData();
+                return name;
+            }
+        }
+
+        public GitRemote? CurrentRemote
+        {
+            get
+            {
+                ValidateData();
+                return gitRemote;
+            }
+        }
+
+        public GitBranch? CurentBranch
+        {
+            get
+            {
+                ValidateData();
+                return gitBranch;
+            }
+        }
+    }
+
     [Location("cache/branches.yaml", LocationAttribute.Location.LibraryFolder)]
     sealed class BranchCache : ScriptObjectSingleton<BranchCache>, IBranchCache
     {
@@ -23,26 +125,35 @@ namespace GitHub.Unity
 
         public void Update(List<GitBranch> localBranchUpdate, List<GitBranch> remoteBranchUpdate)
         {
+            var now = DateTime.Now;
             var isUpdated = false;
 
             var localBranchesIsNull = localBranches == null;
             var localBranchUpdateIsNull = localBranchUpdate == null;
 
-            var remoteBranchesIsNull = remoteBranches == null;
-            var remoteBranchUpdateIsNull = remoteBranchUpdate == null;
-
             if (localBranchesIsNull != localBranchUpdateIsNull
-                || !localBranchesIsNull && !localBranches.SequenceEqual(localBranchUpdate) 
-                || remoteBranchesIsNull != remoteBranchUpdateIsNull 
-                || !remoteBranchesIsNull && !remoteBranches.SequenceEqual(remoteBranchUpdate))
+                || !localBranchesIsNull && !localBranches.SequenceEqual(localBranchUpdate))
             {
                 localBranches = localBranchUpdate;
-                remoteBranches = remoteBranchUpdate;
-                lastUpdatedAt = DateTime.Now;
                 isUpdated = true;
             }
 
-            lastVerifiedAt = DateTime.Now;
+            var remoteBranchesIsNull = remoteBranches == null;
+            var remoteBranchUpdateIsNull = remoteBranchUpdate == null;
+
+            if (remoteBranchesIsNull != remoteBranchUpdateIsNull 
+                || !remoteBranchesIsNull && !remoteBranches.SequenceEqual(remoteBranchUpdate))
+            {
+                remoteBranches = remoteBranchUpdate;
+                isUpdated = true;
+            }
+
+            if(isUpdated)
+            {
+                lastUpdatedAt = now;
+            }
+
+            lastVerifiedAt = now;
             Save(true);
 
             if (isUpdated)
@@ -106,6 +217,7 @@ namespace GitHub.Unity
 
         public void Update(List<GitLogEntry> logUpdate)
         {
+            var now = DateTime.Now;
             var isUpdated = false;
 
             var logIsNull = log == null;
@@ -114,11 +226,11 @@ namespace GitHub.Unity
                 !logIsNull && !log.SequenceEqual(logUpdate))
             {
                 log = logUpdate;
-                lastUpdatedAt = DateTime.Now;
+                lastUpdatedAt = now;
                 isUpdated = true;
             }
 
-            lastVerifiedAt = DateTime.Now;
+            lastVerifiedAt = now;
             Save(true);
 
             if (isUpdated)
@@ -142,6 +254,205 @@ namespace GitHub.Unity
             {
                 CacheInvalidated.SafeInvoke();
                 Update(new List<GitLogEntry>());
+            }
+        }
+
+        public DateTime LastUpdatedAt
+        {
+            get { return lastUpdatedAt; }
+        }
+
+        public DateTime LastVerifiedAt
+        {
+            get { return lastVerifiedAt; }
+        }
+    }
+
+    [Location("cache/gitstatus.yaml", LocationAttribute.Location.LibraryFolder)]
+    sealed class GitStatusCache : ScriptObjectSingleton<GitStatusCache>, IGitStatusCache
+    {
+        private static readonly TimeSpan DataTimeout = TimeSpan.FromSeconds(0.5);
+
+        [SerializeField] private DateTime lastUpdatedAt;
+        [SerializeField] private DateTime lastVerifiedAt;
+        [SerializeField] private GitStatus status;
+
+        public event Action CacheInvalidated;
+        public event Action<DateTime> CacheUpdated;
+
+        public GitStatusCache()
+        { }
+
+        public void Update(GitStatus statusUpdate)
+        {
+            var now = DateTime.Now;
+            var isUpdated = false;
+
+            if (!status.Equals(statusUpdate))
+            {
+                status = statusUpdate;
+                lastUpdatedAt = now;
+                isUpdated = true;
+            }
+
+            lastVerifiedAt = now;
+            Save(true);
+
+            if (isUpdated)
+            {
+                CacheUpdated.SafeInvoke(lastUpdatedAt);
+            }
+        }
+
+        public GitStatus GitStatus
+        {
+            get
+            {
+                ValidateData();
+                return status;
+            }
+        }
+
+        private void ValidateData()
+        {
+            if (DateTime.Now - lastUpdatedAt > DataTimeout)
+            {
+                CacheInvalidated.SafeInvoke();
+                Update(new GitStatus());
+            }
+        }
+
+        public DateTime LastUpdatedAt
+        {
+            get { return lastUpdatedAt; }
+        }
+
+        public DateTime LastVerifiedAt
+        {
+            get { return lastVerifiedAt; }
+        }
+    }
+
+    [Location("cache/gitlocks.yaml", LocationAttribute.Location.LibraryFolder)]
+    sealed class GitLocksCache : ScriptObjectSingleton<GitLocksCache>, IGitLocksCache
+    {
+        private static readonly TimeSpan DataTimeout = TimeSpan.FromSeconds(0.5);
+
+        [SerializeField] private DateTime lastUpdatedAt;
+        [SerializeField] private DateTime lastVerifiedAt;
+        [SerializeField] private List<GitLock> locks;
+
+        public event Action CacheInvalidated;
+        public event Action<DateTime> CacheUpdated;
+
+        public GitLocksCache()
+        { }
+
+        public void Update(List<GitLock> locksUpdate)
+        {
+            var now = DateTime.Now;
+            var isUpdated = false;
+
+            var locksIsNull = locks == null;
+            var locksUpdateIsNull = locksUpdate == null;
+
+            if (locksIsNull != locksUpdateIsNull
+                || !locksIsNull && !locks.SequenceEqual(locksUpdate))
+            {
+                locks = locksUpdate;
+                isUpdated = true;
+                lastUpdatedAt = now;
+            }
+
+            lastVerifiedAt = now;
+            Save(true);
+
+            if (isUpdated)
+            {
+                CacheUpdated.SafeInvoke(lastUpdatedAt);
+            }
+        }
+
+        public List<GitLock> GitLocks
+        {
+            get
+            {
+                ValidateData();
+                return locks;
+            }
+        }
+
+        private void ValidateData()
+        {
+            if (DateTime.Now - lastUpdatedAt > DataTimeout)
+            {
+                CacheInvalidated.SafeInvoke();
+                Update(null);
+            }
+        }
+
+        public DateTime LastUpdatedAt
+        {
+            get { return lastUpdatedAt; }
+        }
+
+        public DateTime LastVerifiedAt
+        {
+            get { return lastVerifiedAt; }
+        }
+    }
+
+    [Location("cache/gituser.yaml", LocationAttribute.Location.LibraryFolder)]
+    sealed class GitUserCache : ScriptObjectSingleton<GitUserCache>, IGitUserCache
+    {
+        private static readonly TimeSpan DataTimeout = TimeSpan.FromSeconds(0.5);
+
+        [SerializeField] private DateTime lastUpdatedAt;
+        [SerializeField] private DateTime lastVerifiedAt;
+        [SerializeField] private User user;
+
+        public event Action CacheInvalidated;
+        public event Action<DateTime> CacheUpdated;
+
+        public GitUserCache()
+        { }
+
+        public void Update(User userUpdate)
+        {
+            var now = DateTime.Now;
+            var isUpdated = false;
+
+            if (user != userUpdate)
+            {
+                user = userUpdate;
+                isUpdated = true;
+                lastUpdatedAt = now;
+            }
+
+            lastVerifiedAt = now;
+            Save(true);
+
+            if (isUpdated)
+            {
+                CacheUpdated.SafeInvoke(lastUpdatedAt);
+            }
+        }
+
+        public User User
+        {
+            get
+            {
+                ValidateData();
+                return user;
+            }
+        }
+
+        private void ValidateData()
+        {
+            if (DateTime.Now - lastUpdatedAt > DataTimeout)
+            {
+                CacheInvalidated.SafeInvoke();
+                Update(null);
             }
         }
 

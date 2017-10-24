@@ -98,7 +98,7 @@ namespace GitHub.Unity
             userSettingsView.Refresh();
             if (Repository != null && Repository.CurrentRemote.HasValue)
             {
-                Repository.ListLocks().Start();
+//                Repository.ListLocks().Start();
             }
         }
 

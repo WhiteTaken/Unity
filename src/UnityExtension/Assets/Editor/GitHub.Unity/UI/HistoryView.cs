@@ -149,7 +149,7 @@ namespace GitHub.Unity
             {
                 logHasChanged = false;
 
-                history = GitLogCache.Instance.Log;
+                history =  Repository.Log;
 
                 if (history.Any())
                 {

@@ -80,7 +80,7 @@ namespace GitHub.Unity
             {
                 Logger.Trace("Determined expectedRepositoryPath:{0}", expectedRepositoryPath);
                 RepositoryPath = expectedRepositoryPath;
-                Repository = new Repository(RepositoryPath.FileName, RepositoryPath);
+                Repository = new Repository(RepositoryPath);
             }
         }
 

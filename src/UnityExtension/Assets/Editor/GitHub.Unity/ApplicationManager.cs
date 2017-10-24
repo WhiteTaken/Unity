@@ -28,10 +28,13 @@ namespace GitHub.Unity
 
         protected override void SetupCache()
         {
-            CacheContainer = new CacheContainer
-            {
+            CacheContainer = new CacheContainer {
                 GitLogCache = GitLogCache.Instance,
-                BranchCache = BranchCache.Instance
+                BranchCache = BranchCache.Instance,
+                RepositoryInfoCache = RepositoryInfoCache.Instance,
+                GitStatusCache = GitStatusCache.Instance,
+                GitLocksCache = GitLocksCache.Instance,
+                GitUserCache = GitUserCache.Instance
             };
         }
 
