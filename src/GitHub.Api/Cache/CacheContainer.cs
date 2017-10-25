@@ -102,8 +102,8 @@ namespace GitHub.Unity
                 if (gitLogCache == null)
                 {
                     gitLogCache = value;
-                    branchCache.CacheInvalidated += () => CacheInvalidated(CacheType.GitLogCache);
-                    branchCache.CacheUpdated += datetime => CacheUpdated(CacheType.GitLogCache, datetime);
+                    gitLogCache.CacheInvalidated += () => CacheInvalidated(CacheType.GitLogCache);
+                    gitLogCache.CacheUpdated += datetime => CacheUpdated(CacheType.GitLogCache, datetime);
                 }
             }
         }
@@ -116,8 +116,8 @@ namespace GitHub.Unity
                 if (repositoryInfoCache == null)
                 {
                     repositoryInfoCache = value;
-                    branchCache.CacheInvalidated += () => CacheInvalidated(CacheType.RepositoryInfoCache);
-                    branchCache.CacheUpdated += datetime => CacheUpdated(CacheType.RepositoryInfoCache, datetime);
+                    repositoryInfoCache.CacheInvalidated += () => CacheInvalidated(CacheType.RepositoryInfoCache);
+                    repositoryInfoCache.CacheUpdated += datetime => CacheUpdated(CacheType.RepositoryInfoCache, datetime);
                 }
             }
         }
@@ -130,8 +130,8 @@ namespace GitHub.Unity
                 if (gitStatusCache == null)
                 {
                     gitStatusCache = value;
-                    branchCache.CacheInvalidated += () => CacheInvalidated(CacheType.GitStatusCache);
-                    branchCache.CacheUpdated += datetime => CacheUpdated(CacheType.GitStatusCache, datetime);
+                    gitStatusCache.CacheInvalidated += () => CacheInvalidated(CacheType.GitStatusCache);
+                    gitStatusCache.CacheUpdated += datetime => CacheUpdated(CacheType.GitStatusCache, datetime);
                 }
             }
         }
@@ -144,8 +144,8 @@ namespace GitHub.Unity
                 if (gitLocksCache == null)
                 {
                     gitLocksCache = value;
-                    branchCache.CacheInvalidated += () => CacheInvalidated(CacheType.GitLocksCache);
-                    branchCache.CacheUpdated += datetime => CacheUpdated(CacheType.GitLocksCache, datetime);
+                    gitLocksCache.CacheInvalidated += () => CacheInvalidated(CacheType.GitLocksCache);
+                    gitLocksCache.CacheUpdated += datetime => CacheUpdated(CacheType.GitLocksCache, datetime);
                 }
             }
         }
@@ -158,8 +158,8 @@ namespace GitHub.Unity
                 if (gitUserCache == null)
                 {
                     gitUserCache = value;
-                    branchCache.CacheInvalidated += () => CacheInvalidated(CacheType.GitUserCache);
-                    branchCache.CacheUpdated += datetime => CacheUpdated(CacheType.GitUserCache, datetime);
+                    gitUserCache.CacheInvalidated += () => CacheInvalidated(CacheType.GitUserCache);
+                    gitUserCache.CacheUpdated += datetime => CacheUpdated(CacheType.GitUserCache, datetime);
                 }
             }
         }
