@@ -134,7 +134,7 @@ namespace GitHub.Unity
 
         public UriString CloneUrl => CurrentRemote.HasValue ? new UriString(CurrentRemote.Value.Url) : null;
 
-        public string Name => repositoryManager.CacheContainer.RepositoryInfoCache.Name;
+        public string Name => repositoryManager.CacheContainer.RepositoryInfoCache.RepositoryName;
 
         public List<GitBranch> LocalBranches => repositoryManager.CacheContainer.BranchCache.LocalBranches;
 

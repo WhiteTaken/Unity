@@ -122,13 +122,36 @@ namespace GitHub.Unity
             Logger.Trace("Initialize");
             watcher.Initialize();
 
-            cacheContainer.GitLogCache.CacheInvalidated += () => {
-                
-            };
+            cacheContainer.CacheInvalidated += CacheContainer_OnCacheInvalidated;
+        }
 
-            cacheContainer.BranchCache.CacheInvalidated += () => {
-                
-            };
+        private void CacheContainer_OnCacheInvalidated(CacheType cacheType)
+        {
+            Logger.Trace("OnCacheInvalidated: {0}", cacheType);
+
+            switch (cacheType)
+            {
+                case CacheType.BranchCache:
+                    break;
+
+                case CacheType.GitLogCache:
+                    break;
+
+                case CacheType.RepositoryInfoCache:
+                    break;
+
+                case CacheType.GitStatusCache:
+                    break;
+
+                case CacheType.GitLocksCache:
+                    break;
+
+                case CacheType.GitUserCache:
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(cacheType), cacheType, null);
+            }
         }
 
         public void Start()
