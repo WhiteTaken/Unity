@@ -37,13 +37,13 @@ namespace GitHub.Unity
                 isUpdated = true;
             }
 
-            if (Nullable.Equals(gitRemote, gitRemoteUpdate))
+            if (!Nullable.Equals(gitRemote, gitRemoteUpdate))
             {
                 gitRemote = gitRemoteUpdate;
                 isUpdated = true;
             }
 
-            if (Nullable.Equals(gitBranch, gitBranchUpdate))
+            if (!Nullable.Equals(gitBranch, gitBranchUpdate))
             {
                 gitBranch = gitBranchUpdate;
                 isUpdated = true;
