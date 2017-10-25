@@ -8,6 +8,7 @@ namespace GitHub.Unity
     [Location("cache/repoinfo.yaml", LocationAttribute.Location.LibraryFolder)]
     sealed class RepositoryInfoCache : ScriptObjectSingleton<RepositoryInfoCache>, IRepositoryInfoCache
     {
+        private static ILogging Logger = Logging.GetLogger<RepositoryInfoCache>();
         private static readonly TimeSpan DataTimeout = TimeSpan.FromSeconds(0.5);
 
         [SerializeField] private DateTime lastUpdatedAt;
@@ -27,6 +28,8 @@ namespace GitHub.Unity
         {
             var now = DateTime.Now;
             var isUpdated = false;
+
+            Logger.Trace("Processing Update: {0}", now);
 
             if (repositoryName != repositoryNameUpdate)
             {
@@ -56,7 +59,12 @@ namespace GitHub.Unity
 
             if (isUpdated)
             {
+                Logger.Trace("Updated: {0}", now);
                 CacheUpdated.SafeInvoke(lastUpdatedAt);
+            }
+            else
+            {
+                Logger.Trace("Verified: {0}", now);
             }
         }
 
@@ -70,6 +78,7 @@ namespace GitHub.Unity
 
         public void Invalidate()
         {
+            Logger.Trace("Invalidated");
             CacheInvalidated.SafeInvoke();
             Update(null, null, null);
         }
@@ -115,6 +124,7 @@ namespace GitHub.Unity
     [Location("cache/branches.yaml", LocationAttribute.Location.LibraryFolder)]
     sealed class BranchCache : ScriptObjectSingleton<BranchCache>, IBranchCache
     {
+        private static ILogging Logger = Logging.GetLogger<RepositoryInfoCache>();
         private static readonly TimeSpan DataTimeout = TimeSpan.FromSeconds(0.5);
 
         [SerializeField] private DateTime lastUpdatedAt;
@@ -132,6 +142,8 @@ namespace GitHub.Unity
         {
             var now = DateTime.Now;
             var isUpdated = false;
+
+            Logger.Trace("Processing Update: {0}", now);
 
             var localBranchesIsNull = localBranches == null;
             var localBranchUpdateIsNull = localBranchUpdate == null;
@@ -163,7 +175,12 @@ namespace GitHub.Unity
 
             if (isUpdated)
             {
+                Logger.Trace("Updated: {0}", now);
                 CacheUpdated.SafeInvoke(lastUpdatedAt);
+            }
+            else
+            {
+                Logger.Trace("Verified: {0}", now);
             }
         }
 
@@ -177,6 +194,7 @@ namespace GitHub.Unity
 
         public void Invalidate()
         {
+            Logger.Trace("Invalidated");
             CacheInvalidated.SafeInvoke();
             Update(new List<GitBranch>(), new List<GitBranch>());
         }
@@ -213,6 +231,7 @@ namespace GitHub.Unity
     [Location("cache/gitlog.yaml", LocationAttribute.Location.LibraryFolder)]
     sealed class GitLogCache : ScriptObjectSingleton<GitLogCache>, IGitLogCache
     {
+        private static ILogging Logger = Logging.GetLogger<RepositoryInfoCache>();
         private static readonly TimeSpan DataTimeout = TimeSpan.FromSeconds(0.5);
 
         [SerializeField] private DateTime lastUpdatedAt;
@@ -230,6 +249,8 @@ namespace GitHub.Unity
             var now = DateTime.Now;
             var isUpdated = false;
 
+            Logger.Trace("Processing Update: {0}", now);
+
             var logIsNull = log == null;
             var updateIsNull = logUpdate == null;
             if (logIsNull != updateIsNull ||
@@ -245,7 +266,12 @@ namespace GitHub.Unity
 
             if (isUpdated)
             {
+                Logger.Trace("Updated: {0}", now);
                 CacheUpdated.SafeInvoke(lastUpdatedAt);
+            }
+            else
+            {
+                Logger.Trace("Verified: {0}", now);
             }
         }
 
@@ -268,6 +294,7 @@ namespace GitHub.Unity
 
         public void Invalidate()
         {
+            Logger.Trace("Invalidated");
             CacheInvalidated.SafeInvoke();
             Update(new List<GitLogEntry>());
         }
@@ -286,6 +313,7 @@ namespace GitHub.Unity
     [Location("cache/gitstatus.yaml", LocationAttribute.Location.LibraryFolder)]
     sealed class GitStatusCache : ScriptObjectSingleton<GitStatusCache>, IGitStatusCache
     {
+        private static ILogging Logger = Logging.GetLogger<RepositoryInfoCache>();
         private static readonly TimeSpan DataTimeout = TimeSpan.FromSeconds(0.5);
 
         [SerializeField] private DateTime lastUpdatedAt;
@@ -303,6 +331,8 @@ namespace GitHub.Unity
             var now = DateTime.Now;
             var isUpdated = false;
 
+            Logger.Trace("Processing Update: {0}", now);
+
             if (!status.Equals(statusUpdate))
             {
                 status = statusUpdate;
@@ -315,7 +345,12 @@ namespace GitHub.Unity
 
             if (isUpdated)
             {
+                Logger.Trace("Updated: {0}", now);
                 CacheUpdated.SafeInvoke(lastUpdatedAt);
+            }
+            else
+            {
+                Logger.Trace("Verified: {0}", now);
             }
         }
 
@@ -338,6 +373,7 @@ namespace GitHub.Unity
 
         public void Invalidate()
         {
+            Logger.Trace("Invalidated");
             CacheInvalidated.SafeInvoke();
             Update(new GitStatus());
         }
@@ -356,6 +392,7 @@ namespace GitHub.Unity
     [Location("cache/gitlocks.yaml", LocationAttribute.Location.LibraryFolder)]
     sealed class GitLocksCache : ScriptObjectSingleton<GitLocksCache>, IGitLocksCache
     {
+        private static ILogging Logger = Logging.GetLogger<RepositoryInfoCache>();
         private static readonly TimeSpan DataTimeout = TimeSpan.FromSeconds(0.5);
 
         [SerializeField] private DateTime lastUpdatedAt;
@@ -373,6 +410,8 @@ namespace GitHub.Unity
             var now = DateTime.Now;
             var isUpdated = false;
 
+            Logger.Trace("Processing Update: {0}", now);
+
             var locksIsNull = locks == null;
             var locksUpdateIsNull = locksUpdate == null;
 
@@ -389,7 +428,12 @@ namespace GitHub.Unity
 
             if (isUpdated)
             {
+                Logger.Trace("Updated: {0}", now);
                 CacheUpdated.SafeInvoke(lastUpdatedAt);
+            }
+            else
+            {
+                Logger.Trace("Verified: {0}", now);
             }
         }
 
@@ -412,6 +456,7 @@ namespace GitHub.Unity
 
         public void Invalidate()
         {
+            Logger.Trace("Invalidated");
             CacheInvalidated.SafeInvoke();
             Update(null);
         }
@@ -430,6 +475,7 @@ namespace GitHub.Unity
     [Location("cache/gituser.yaml", LocationAttribute.Location.LibraryFolder)]
     sealed class GitUserCache : ScriptObjectSingleton<GitUserCache>, IGitUserCache
     {
+        private static ILogging Logger = Logging.GetLogger<RepositoryInfoCache>();
         private static readonly TimeSpan DataTimeout = TimeSpan.FromSeconds(0.5);
 
         [SerializeField] private DateTime lastUpdatedAt;
@@ -447,6 +493,8 @@ namespace GitHub.Unity
             var now = DateTime.Now;
             var isUpdated = false;
 
+            Logger.Trace("Processing Update: {0}", now);
+
             if (user != userUpdate)
             {
                 user = userUpdate;
@@ -459,7 +507,12 @@ namespace GitHub.Unity
 
             if (isUpdated)
             {
+                Logger.Trace("Updated: {0}", now);
                 CacheUpdated.SafeInvoke(lastUpdatedAt);
+            }
+            else
+            {
+                Logger.Trace("Verified: {0}", now);
             }
         }
 
@@ -482,6 +535,7 @@ namespace GitHub.Unity
 
         public void Invalidate()
         {
+            Logger.Trace("Invalidated");
             CacheInvalidated.SafeInvoke();
             Update(null);
         }
