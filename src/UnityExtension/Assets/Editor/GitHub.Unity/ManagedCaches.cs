@@ -24,7 +24,7 @@ namespace GitHub.Unity
         public RepositoryInfoCache()
         { }
 
-        public void Update(string repositoryNameUpdate, GitRemote? gitRemoteUpdate, GitBranch? gitBranchUpdate)
+        public void UpdateData(string repositoryNameUpdate, GitRemote? gitRemoteUpdate, GitBranch? gitBranchUpdate)
         {
             var now = DateTime.Now;
             var isUpdated = false;
@@ -68,19 +68,19 @@ namespace GitHub.Unity
             }
         }
 
-        public void Validate()
+        public void ValidateData()
         {
             if (DateTime.Now - lastUpdatedAt > DataTimeout)
             {
-                Invalidate();
+                InvalidateData();
             }
         }
 
-        public void Invalidate()
+        public void InvalidateData()
         {
             Logger.Trace("Invalidated");
             CacheInvalidated.SafeInvoke();
-            Update(null, null, null);
+            UpdateData(null, null, null);
         }
 
         public DateTime LastUpdatedAt
@@ -97,7 +97,7 @@ namespace GitHub.Unity
         {
             get
             {
-                Validate();
+                ValidateData();
                 return repositoryName;
             }
         }
@@ -106,7 +106,7 @@ namespace GitHub.Unity
         {
             get
             {
-                Validate();
+                ValidateData();
                 return gitRemote;
             }
         }
@@ -115,7 +115,7 @@ namespace GitHub.Unity
         {
             get
             {
-                Validate();
+                ValidateData();
                 return gitBranch;
             }
         }
@@ -138,7 +138,7 @@ namespace GitHub.Unity
         public BranchCache()
         { }
 
-        public void Update(List<GitBranch> localBranchUpdate, List<GitBranch> remoteBranchUpdate)
+        public void UpdateData(List<GitBranch> localBranchUpdate, List<GitBranch> remoteBranchUpdate)
         {
             var now = DateTime.Now;
             var isUpdated = false;
@@ -184,26 +184,26 @@ namespace GitHub.Unity
             }
         }
 
-        public void Validate()
+        public void ValidateData()
         {
             if (DateTime.Now - lastUpdatedAt > DataTimeout)
             {
-                Invalidate();
+                InvalidateData();
             }
         }
 
-        public void Invalidate()
+        public void InvalidateData()
         {
             Logger.Trace("Invalidated");
             CacheInvalidated.SafeInvoke();
-            Update(new List<GitBranch>(), new List<GitBranch>());
+            UpdateData(new List<GitBranch>(), new List<GitBranch>());
         }
 
         public List<GitBranch> LocalBranches
         {
             get
             {
-                Validate();
+                ValidateData();
                 return localBranches;
             }
         }
@@ -212,7 +212,7 @@ namespace GitHub.Unity
         {
             get
             {
-                Validate();
+                ValidateData();
                 return remoteBranches;
             }
         }
@@ -244,7 +244,7 @@ namespace GitHub.Unity
         public GitLogCache()
         { }
 
-        public void Update(List<GitLogEntry> logUpdate)
+        public void UpdateData(List<GitLogEntry> logUpdate)
         {
             var now = DateTime.Now;
             var isUpdated = false;
@@ -279,24 +279,24 @@ namespace GitHub.Unity
         {
             get
             {
-                Validate();
+                ValidateData();
                 return log;
             }
         }
 
-        public void Validate()
+        public void ValidateData()
         {
             if (DateTime.Now - lastUpdatedAt > DataTimeout)
             {
-                Invalidate();
+                InvalidateData();
             }
         }
 
-        public void Invalidate()
+        public void InvalidateData()
         {
             Logger.Trace("Invalidated");
             CacheInvalidated.SafeInvoke();
-            Update(new List<GitLogEntry>());
+            UpdateData(new List<GitLogEntry>());
         }
 
         public DateTime LastUpdatedAt
@@ -326,7 +326,7 @@ namespace GitHub.Unity
         public GitStatusCache()
         { }
 
-        public void Update(GitStatus statusUpdate)
+        public void UpdateData(GitStatus statusUpdate)
         {
             var now = DateTime.Now;
             var isUpdated = false;
@@ -358,24 +358,24 @@ namespace GitHub.Unity
         {
             get
             {
-                Validate();
+                ValidateData();
                 return status;
             }
         }
 
-        public void Validate()
+        public void ValidateData()
         {
             if (DateTime.Now - lastUpdatedAt > DataTimeout)
             {
-                Invalidate();
+                InvalidateData();
             }
         }
 
-        public void Invalidate()
+        public void InvalidateData()
         {
             Logger.Trace("Invalidated");
             CacheInvalidated.SafeInvoke();
-            Update(new GitStatus());
+            UpdateData(new GitStatus());
         }
 
         public DateTime LastUpdatedAt
@@ -405,7 +405,7 @@ namespace GitHub.Unity
         public GitLocksCache()
         { }
 
-        public void Update(List<GitLock> locksUpdate)
+        public void UpdateData(List<GitLock> locksUpdate)
         {
             var now = DateTime.Now;
             var isUpdated = false;
@@ -441,24 +441,24 @@ namespace GitHub.Unity
         {
             get
             {
-                Validate();
+                ValidateData();
                 return locks;
             }
         }
 
-        public void Validate()
+        public void ValidateData()
         {
             if (DateTime.Now - lastUpdatedAt > DataTimeout)
             {
-                Invalidate();
+                InvalidateData();
             }
         }
 
-        public void Invalidate()
+        public void InvalidateData()
         {
             Logger.Trace("Invalidated");
             CacheInvalidated.SafeInvoke();
-            Update(null);
+            UpdateData(null);
         }
 
         public DateTime LastUpdatedAt
@@ -488,7 +488,7 @@ namespace GitHub.Unity
         public GitUserCache()
         { }
 
-        public void Update(User userUpdate)
+        public void UpdateData(User userUpdate)
         {
             var now = DateTime.Now;
             var isUpdated = false;
@@ -520,24 +520,24 @@ namespace GitHub.Unity
         {
             get
             {
-                Validate();
+                ValidateData();
                 return user;
             }
         }
 
-        public void Validate()
+        public void ValidateData()
         {
             if (DateTime.Now - lastUpdatedAt > DataTimeout)
             {
-                Invalidate();
+                InvalidateData();
             }
         }
 
-        public void Invalidate()
+        public void InvalidateData()
         {
             Logger.Trace("Invalidated");
             CacheInvalidated.SafeInvoke();
-            Update(null);
+            UpdateData(null);
         }
 
         public DateTime LastUpdatedAt

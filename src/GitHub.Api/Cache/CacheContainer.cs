@@ -52,32 +52,32 @@ namespace GitHub.Unity
 
         public void Validate(CacheType cacheType)
         {
-            GetManagedCache(cacheType).Validate();
+            GetManagedCache(cacheType).ValidateData();
         }
 
         public void ValidateAll()
         {
-            BranchCache.Validate();
-            GitLogCache.Validate();
-            RepositoryInfoCache.Validate();
-            GitStatusCache.Validate();
-            GitLocksCache.Validate();
-            GitUserCache.Validate();
+            BranchCache.ValidateData();
+            GitLogCache.ValidateData();
+            RepositoryInfoCache.ValidateData();
+            GitStatusCache.ValidateData();
+            GitLocksCache.ValidateData();
+            GitUserCache.ValidateData();
         }
 
         public void Invalidate(CacheType cacheType)
         {
-            GetManagedCache(cacheType).Invalidate();
+            GetManagedCache(cacheType).InvalidateData();
         }
 
         public void InvalidateAll()
         {
-            BranchCache.Invalidate();
-            GitLogCache.Invalidate();
-            RepositoryInfoCache.Invalidate();
-            GitStatusCache.Invalidate();
-            GitLocksCache.Invalidate();
-            GitUserCache.Invalidate();
+            BranchCache.InvalidateData();
+            GitLogCache.InvalidateData();
+            RepositoryInfoCache.InvalidateData();
+            GitStatusCache.InvalidateData();
+            GitLocksCache.InvalidateData();
+            GitUserCache.InvalidateData();
         }
 
         public IBranchCache BranchCache
@@ -197,8 +197,8 @@ namespace GitHub.Unity
         event Action CacheInvalidated;
         event Action<DateTime> CacheUpdated;
 
-        void Validate();
-        void Invalidate();
+        void ValidateData();
+        void InvalidateData();
 
         DateTime LastUpdatedAt { get; }
         DateTime LastVerifiedAt { get; }
@@ -240,7 +240,7 @@ namespace GitHub.Unity
 
     public interface IBranch
     {
-        void Update(List<GitBranch> localBranchUpdate, List<GitBranch> remoteBranchUpdate);
+        void UpdateData(List<GitBranch> localBranchUpdate, List<GitBranch> remoteBranchUpdate);
         List<GitBranch> LocalBranches { get; }
         List<GitBranch> RemoteBranches { get; }
     }
